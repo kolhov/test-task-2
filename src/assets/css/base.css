@@ -1,0 +1,37 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --font-family: "Manrope", sans-serif;
+    --second-family: "Roboto", sans-serif;
+    --body-s-font-family: "Manrope", Helvetica;
+    --body-s-font-size: 13px;
+    --body-s-font-style: normal;
+    --body-s-font-weight: 500;
+    --body-s-letter-spacing: 0px;
+    --body-s-line-height: 20px;
+    --desktop-body-m-bold-font-family: "Manrope", Helvetica;
+    --desktop-body-m-bold-font-size: 15px;
+    --desktop-body-m-bold-font-style: normal;
+    --desktop-body-m-bold-font-weight: 800;
+    --desktop-body-m-bold-letter-spacing: 0px;
+    --desktop-body-m-bold-line-height: 24px;
+    --desktop-body-s-font-family: "Manrope", Helvetica;
+    --desktop-body-s-font-size: 13px;
+    --desktop-body-s-font-style: normal;
+    --desktop-body-s-font-weight: 500;
+    --desktop-body-s-letter-spacing: 0px;
+    --desktop-body-s-line-height: 20px;
+    --scbase-1: rgba(47, 49, 68, 1);
+    --scbase-11: rgba(43, 78, 197, 1);
+    --scbase-2: rgba(47, 49, 68, 0.65);
+    --scbase-4: rgba(224, 224, 224, 1);
+    --scbase-5: rgba(244, 244, 248, 1);
+    --scbase-6: rgba(255, 255, 255, 1);
+    --scbase-7: rgba(55, 97, 243, 1);
+    --scbase-17: rgba(55, 124, 244, 1);
+}
+
