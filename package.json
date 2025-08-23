@@ -14,9 +14,11 @@
     "type-check": "vue-tsc --build"
   },
   "dependencies": {
+    "@tanstack/vue-table": "^8.21.3",
     "vue": "^3.5.18"
   },
   "devDependencies": {
+    "@faker-js/faker": "^9.9.0",
     "@tsconfig/node22": "^22.0.2",
     "@types/node": "^22.16.5",
     "@vitejs/plugin-vue": "^6.0.1",

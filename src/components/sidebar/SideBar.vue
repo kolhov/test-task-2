@@ -76,20 +76,22 @@ const isOpen = ref(true);
               <div class="text-wrapper-5">БМ</div>
             </div>
           </div>
-          <div class="nav-fotter">
-            <div class="navButton">
-              <LogOut class="icon-instance-node" color="#999999"/>
-              <div class="text-wrapper">Выйти</div>
-            </div>
-            <div class="navButton">
-              <Flag />
-              <div class="text-wrapper">Русcкий</div>
-              <div class="fether-icons-chevron-wrapper">
-                <ChevronRight class="fether-icons-chevron"/>
+          <div>
+            <div class="nav-fotter">
+              <div class="navButton">
+                <LogOut class="icon-instance-node" color="#999999"/>
+                <div class="text-wrapper">Выйти</div>
+              </div>
+              <div class="navButton">
+                <Flag />
+                <div class="text-wrapper">Русcкий</div>
+                <div class="fether-icons-chevron-wrapper">
+                  <ChevronRight class="fether-icons-chevron"/>
+                </div>
               </div>
             </div>
+            <div class="text-wrapper-6">Версия 1.02</div>
           </div>
-          <div class="text-wrapper-6">Версия 1.02</div>
         </div>
       </aside>
     </transition>
@@ -124,6 +126,8 @@ const isOpen = ref(true);
   display: flex;
   overflow-y: auto;
   height: 100vh;
+  width: 274px;
+  flex-shrink: 0;
 }
 .side-bar-wrap {
   height: 100%;
@@ -180,6 +184,7 @@ const isOpen = ref(true);
   gap: 4px;
   margin-left: 0.5rem;
   margin-right: 0.5rem;
+  height: 100%;
 }
 
 .menu .fotter-nav {
@@ -190,7 +195,6 @@ const isOpen = ref(true);
   margin-left: 0.5rem;
   margin-right: 0.5rem;
   margin-top: 1rem;
-
 }
 
 .menu .icon-instance-node {
