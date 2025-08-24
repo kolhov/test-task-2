@@ -1,8 +1,5 @@
 <script setup lang="ts">
-
 import {
-  type AccessorFnColumnDef,
-  type ColumnDef,
   FlexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -285,10 +282,10 @@ td {
   margin-left: 0.4rem;
   height: 1rem;
 }
-.sort-icon-desc {
+.sort-icon-asc {
   transform: rotate(180deg) translateY(-40%);
 }
-.sort-icon-asc {
+.sort-icon-desc {
   transform: translateY(-10%);
 }
 

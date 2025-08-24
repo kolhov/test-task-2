@@ -10,17 +10,19 @@ import sessions from './data1.json';
 import type {Session} from "@/components/sessions/sessions.types.ts";
 import {parseISO, format} from "date-fns";
 import StatusBadge from '@/components/status/StatusBadge.vue';
-import TanTable from "@/components/table/Table.vue";
+import TanTable from "@/components/tan-table/TanTable.vue";
+import Dialog from "@/components/dialog/Dialog.vue";
+import SessionsCreate from "@/components/sessions/SessionsCreate.vue";
 
-const globalFilter = ref('');
+const showDialog = ref<boolean>(false);
 
 // Нет нормальных типов, только на коленке сгенерированные так что пока any
 const sessionData = ref(sessions.sessions as any);
 const columnHelper = createColumnHelper<Session>()
-
+const globalFilter = ref('');
 const columns = [
-      columnHelper.accessor(row =>
-          format(parseISO(row.start), 'dd.mm.yyyy, hh:mm') + format(parseISO(row.end), '-HH:mm'), {
+      columnHelper.accessor(row =>    // Время конвертируется в локальное из UTC
+          format(parseISO(row.start), 'dd.MM.yyyy, hh:mm') + format(parseISO(row.end), '-HH:mm'), {
         header: 'Дата и время',
       }),
       columnHelper.accessor(row => formatSessionStatus(row.status.name).text, {
@@ -97,6 +99,11 @@ const formatSessionStatus = (sStatus: string) => {
 
 <template>
   <main>
+    <Dialog v-model="showDialog">
+      <SessionsCreate  @close="showDialog = false"
+                       v-model="sessionData"
+      />
+    </Dialog>
     <div class="main-wrap">
       <div class="header-wrap">
         <h1 class="text-wrap-header">Учебные сессии</h1>
@@ -114,7 +121,11 @@ const formatSessionStatus = (sStatus: string) => {
           <button class="header-filters">
             <NotFilterIcon/>
           </button>
-          <button class="create-button">Создать</button>
+          <button class="create-button"
+                  @click="showDialog = true"
+          >
+            Создать
+          </button>
         </div>
       </div>
       <TanTable :table-props="{data: sessionData, filter: globalFilter, columns: columns}"/>
