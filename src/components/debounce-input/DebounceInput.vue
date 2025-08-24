@@ -51,5 +51,7 @@ input {
   font-family: var(--font-family), serif;
   font-weight: 500;
   font-size: 0.81rem;
+  height: 2.5rem;
+  width: 13rem;
 }
 </style>

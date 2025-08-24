@@ -2,60 +2,85 @@
 import ChevronIcon from '@/assets/svg/shevron.svg';
 import FilterIcon from '@/assets/svg/filter.svg';
 import NotFilterIcon from '@/assets/svg/filter-2.svg';
-import DebouncedInput from '@/components/debounce-input/DebounceInput.vue'
-
+import DebouncedInput from '@/components/debounce-input/DebounceInput.vue';
 import {
   FlexRender,
   getCoreRowModel,
   getPaginationRowModel,
   useVueTable,
   createColumnHelper,
-  getFilteredRowModel
-} from '@tanstack/vue-table'
-import {computed, ref} from 'vue'
-import {makeData, Person} from './makeData'
+  getFilteredRowModel,
+  getSortedRowModel,
+  type SortingState
+} from '@tanstack/vue-table';
+import {computed, h, ref} from 'vue';
+import sessions from './data1.json';
+import type {Session} from "@/components/sessions/sessions.types.ts";
+import {parseISO, format} from "date-fns";
+import StatusBadge from '@/components/status/StatusBadge.vue';
 
 const INITIAL_PAGE_INDEX = 0
 const globalFilter = ref('');
-const defaultData = makeData(100)
-const columnHelper = createColumnHelper<Person>()
+const sorting = ref<SortingState>([]);
 const goToPageNumber = ref(INITIAL_PAGE_INDEX + 1)
-const data = ref(defaultData)
+
+// Нет нормальных типов, только на коленке сгенерированные так что пока any
+const sessionData = ref(sessions.sessions as any);
+const columnHelper = createColumnHelper<Session>()
 
 const columns = [
-  columnHelper.accessor('firstName', {
-    header: 'Name',
+  columnHelper.accessor(row => {
+    return {
+      start: parseISO(row.start),
+      end: parseISO(row.end)
+    }
+  }, {
+    header: 'Дата и время',
+    cell: ({getValue}) => {
+      const {start, end} = getValue();
+      return format(start, 'dd.mm.yyyy, hh:mm') + format(end, '-HH:mm');
+    }
   }),
-  columnHelper.accessor(row => row.lastName, {
-    header: 'Last Name',
+  columnHelper.accessor(row => row.status.name, {
+    header: 'Статус',
+    cell: ({row}) => h(StatusBadge, { status: row.original.status.name })
   }),
-  columnHelper.accessor('age', {
-    header: 'Age',
+  columnHelper.accessor(row => row.module, {
+    header: 'Название учебного модуля',
   }),
-  columnHelper.accessor('visits', {
-    header: 'Visits',
+  columnHelper.accessor(row => row.type.name, {
+    header: 'Тип сессии',
   }),
-  columnHelper.accessor('status', {
-    header: 'Status',
+  columnHelper.accessor(row => row.rooms.map(x => x.name).join(', '), {
+    header: 'Комната',
   }),
-  columnHelper.accessor('progress', {
-    header: 'Profile Progress',
-  })
+  columnHelper.accessor(row => row.groups.map(x => x.name).join(', '), {
+    header: 'Группа',
+  }),
 ]
 
 const table = useVueTable({
   get data() {
-    return data.value
+    return sessionData.value
   },
   state: {
     get globalFilter() {
-      return globalFilter.value
+      return globalFilter.value;
     },
+    get sorting() {
+      return sorting.value;
+    }
+  },
+  onSortingChange: updateOrValue => {
+    sorting.value = typeof updateOrValue === 'function'
+        ? updateOrValue(sorting.value)
+        : updateOrValue
   },
   columns,
   getCoreRowModel: getCoreRowModel(),
   getPaginationRowModel: getPaginationRowModel(),
   getFilteredRowModel: getFilteredRowModel(),
+  getSortedRowModel: getSortedRowModel(),
 })
 
 function handleGoToPage(page: number) {
@@ -63,12 +88,9 @@ function handleGoToPage(page: number) {
   table.setPageIndex(page);
 }
 
-function handlePageSizeChange(e: any) {
-  table.setPageSize(Number(e.target.value))
-}
-
 const pageIndex = computed(() => table.getState().pagination.pageIndex);
 const pageCount = computed(() => table.getPageCount());
+table.setPageSize(11);
 </script>
 
 <template>
@@ -105,18 +127,24 @@ const pageCount = computed(() => table.getPageCount());
                   v-for="header in headerGroup.headers"
                   :key="header.id"
                   :colSpan="header.colSpan"
+                  class="text-wrap-table-head"
+                  @click="header.column.getToggleSortingHandler()?.($event)"
               >
                 <FlexRender
                     v-if="!header.isPlaceholder"
                     :render="header.column.columnDef.header"
                     :props="header.getContext()"
                 />
+                <ChevronIcon class="sort-icon sort-icon-asc" v-if="header.column.getIsSorted() === 'asc'" />
+                <ChevronIcon class="sort-icon sort-icon-desc" v-else-if="header.column.getIsSorted() === 'desc'" />
               </th>
             </tr>
             </thead>
             <tbody>
             <tr v-for="row in table.getRowModel().rows" :key="row.id">
-              <td v-for="cell in row.getVisibleCells()" :key="cell.id">
+              <td v-for="cell in row.getVisibleCells()" :key="cell.id"
+                  class="text-wrap"
+              >
                 <FlexRender
                     :render="cell.column.columnDef.cell"
                     :props="cell.getContext()"
@@ -124,24 +152,6 @@ const pageCount = computed(() => table.getPageCount());
               </td>
             </tr>
             </tbody>
-            <tfoot>
-            <tr
-                v-for="footerGroup in table.getFooterGroups()"
-                :key="footerGroup.id"
-            >
-              <th
-                  v-for="header in footerGroup.headers"
-                  :key="header.id"
-                  :colSpan="header.colSpan"
-              >
-                <FlexRender
-                    v-if="!header.isPlaceholder"
-                    :render="header.column.columnDef.footer"
-                    :props="header.getContext()"
-                />
-              </th>
-            </tr>
-            </tfoot>
           </table>
           <div class="paginator-wrap">
             <!--              <button-->
@@ -232,25 +242,40 @@ const pageCount = computed(() => table.getPageCount());
 
 <style scoped>
 table {
-  border: 1px solid lightgray;
+  width: 100%;
+  height: 100%;
+  border-collapse: collapse;
 }
 
-tbody {
-  border-bottom: 1px solid lightgray;
+tr:nth-child(even) {
+  background: var(--scbase-12);
 }
 
 th {
-  border-bottom: 1px solid lightgray;
-  border-right: 1px solid lightgray;
-  padding: 2px 4px;
+  background-color: var(--scbase-12);
+  padding-block: 0.62rem;
+  padding-inline: 1rem;
+  height: 3.25rem;
+  min-width: 9.12rem;
+  cursor: pointer;
 }
 
-tfoot {
-  color: gray;
+th:hover {
+  background-color: var(--scbase-4);
 }
 
-tfoot th {
-  font-weight: normal;
+th:nth-child(1) {
+  border-radius: 0.75rem 0 0;
+}
+
+th:last-child {
+  border-radius: 0 0.75rem 0 0;
+}
+
+td {
+  padding-block: 0.62rem;
+  padding-inline: 1rem;
+  height: 2.75rem;
 }
 
 .paginator-wrap {
@@ -258,6 +283,8 @@ tfoot th {
   padding: 0.75rem;
   background: #f5f7f9;
   gap: 0.5rem;
+  border: 1px solid var(--scbase-5);
+  border-radius: 0 0 0.75rem 0.75rem;
 }
 
 .paginator-button {
@@ -288,10 +315,10 @@ tfoot th {
 }
 
 .table-wrap {
-  border: 1px solid var(--scbase-5);
+  border: 1px solid var(--scbase-12);
   border-radius: 0.75rem;
   width: 100%;
-  height: calc(100% - 1.2rem);
+  height: auto; /* calc(100% - 1.2rem);*/
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
@@ -378,6 +405,43 @@ main {
   font-size: 0.81rem;
   line-height: 154%;
   color: var(--scbase-1);
+}
+
+.text-wrap {
+  font-family: var(--font-family), serif;
+  font-weight: 500;
+  font-size: 0.94rem;
+  line-height: 160%;
+  color: #2f3144;
+}
+
+.text-wrap-table-head {
+  font-family: var(--font-family), serif;
+  font-weight: 800;
+  font-size: 1.06rem;
+  line-height: 165%;
+  color: #2f3144;
+  justify-content: center;
+}
+
+.sort-icon {
+  border-radius: 0.38rem;
+  margin-left: 0.4rem;
+  height: 1rem;
+}
+.sort-icon-desc {
+  transform: rotate(180deg) translateY(-40%);
+}
+.sort-icon-asc {
+  transform: translateY(-10%);
+}
+
+.text-wrap-status {
+  font-family: var(--font-family), serif;
+  font-weight: 500;
+  font-size: 0.81rem;
+  line-height: 154%;
+  color: #2f3144;
 }
 
 .text-wrap-header {

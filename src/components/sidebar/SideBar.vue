@@ -126,7 +126,7 @@ const isOpen = ref(true);
   display: flex;
   overflow-y: auto;
   height: 100vh;
-  width: 274px;
+
   flex-shrink: 0;
 }
 .side-bar-wrap {
