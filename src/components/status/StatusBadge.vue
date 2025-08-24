@@ -1,40 +1,10 @@
 <script setup lang="ts">
-import {computed, onMounted, ref} from "vue";
-
 type statuses = 'planned' | 'completed' | 'canceled' | 'ongoing';
 const props = defineProps<{
-  status: string | statuses
+  text: string,
+  className: string | statuses
 }>();
 
-const className = ref<string>('');
-const text = ref<string>('');
-
-onMounted(
-    () => {
-      switch (props.status) {
-        case 'planned': {
-          text.value = 'Запланировано';
-          className.value = 'planned'
-          break;
-        }
-        case 'completed': {
-          text.value = 'Завершено';
-          className.value = 'completed'
-          break;
-        }
-        case 'canceled': {
-          text.value = 'Отменено';
-          className.value = 'canceled'
-          break;
-        }
-        case 'ongoing': {
-          text.value = 'Идёт';
-          className.value = 'ongoing'
-          break;
-        }
-      }
-    }
-)
 </script>
 
 <template>

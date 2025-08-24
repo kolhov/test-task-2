@@ -1,96 +1,98 @@
 <script setup lang="ts">
-import ChevronIcon from '@/assets/svg/shevron.svg';
 import FilterIcon from '@/assets/svg/filter.svg';
 import NotFilterIcon from '@/assets/svg/filter-2.svg';
 import DebouncedInput from '@/components/debounce-input/DebounceInput.vue';
 import {
-  FlexRender,
-  getCoreRowModel,
-  getPaginationRowModel,
-  useVueTable,
   createColumnHelper,
-  getFilteredRowModel,
-  getSortedRowModel,
-  type SortingState
 } from '@tanstack/vue-table';
-import {computed, h, ref} from 'vue';
+import {h, ref} from 'vue';
 import sessions from './data1.json';
 import type {Session} from "@/components/sessions/sessions.types.ts";
 import {parseISO, format} from "date-fns";
 import StatusBadge from '@/components/status/StatusBadge.vue';
+import TanTable from "@/components/table/Table.vue";
 
-const INITIAL_PAGE_INDEX = 0
 const globalFilter = ref('');
-const sorting = ref<SortingState>([]);
-const goToPageNumber = ref(INITIAL_PAGE_INDEX + 1)
 
 // Нет нормальных типов, только на коленке сгенерированные так что пока any
 const sessionData = ref(sessions.sessions as any);
 const columnHelper = createColumnHelper<Session>()
 
 const columns = [
-  columnHelper.accessor(row => {
-    return {
-      start: parseISO(row.start),
-      end: parseISO(row.end)
-    }
-  }, {
-    header: 'Дата и время',
-    cell: ({getValue}) => {
-      const {start, end} = getValue();
-      return format(start, 'dd.mm.yyyy, hh:mm') + format(end, '-HH:mm');
-    }
-  }),
-  columnHelper.accessor(row => row.status.name, {
-    header: 'Статус',
-    cell: ({row}) => h(StatusBadge, { status: row.original.status.name })
-  }),
-  columnHelper.accessor(row => row.module, {
-    header: 'Название учебного модуля',
-  }),
-  columnHelper.accessor(row => row.type.name, {
-    header: 'Тип сессии',
-  }),
-  columnHelper.accessor(row => row.rooms.map(x => x.name).join(', '), {
-    header: 'Комната',
-  }),
-  columnHelper.accessor(row => row.groups.map(x => x.name).join(', '), {
-    header: 'Группа',
-  }),
-]
+      columnHelper.accessor(row =>
+          format(parseISO(row.start), 'dd.mm.yyyy, hh:mm') + format(parseISO(row.end), '-HH:mm'), {
+        header: 'Дата и время',
+      }),
+      columnHelper.accessor(row => formatSessionStatus(row.status.name).text, {
+        header: 'Статус',
+        cell: ({row}) => {
+          const {text, className} = formatSessionStatus(row.original.status.name);
+          return h(StatusBadge, {text, className});
+        }
+      }),
+      columnHelper.accessor(row => row.module, {
+        header: 'Название учебного модуля',
+      }),
+      columnHelper.accessor(row => formatSessionType(row.type.name), {
+        header: 'Тип сессии',
+      }),
+      columnHelper.accessor(row => row.rooms.map(x => x.name).join(', '), {
+        header: 'Комната',
+      }),
+      columnHelper.accessor(row => row.groups.map(x => x.name).join(', '), {
+        header: 'Группа',
+      }),
+    ]
 
-const table = useVueTable({
-  get data() {
-    return sessionData.value
-  },
-  state: {
-    get globalFilter() {
-      return globalFilter.value;
-    },
-    get sorting() {
-      return sorting.value;
+const formatSessionType = (sType: string) => {
+  let text = sType;
+  switch (sType) {
+    case 'lesson': {
+      text = 'Урок';
+      break;
     }
-  },
-  onSortingChange: updateOrValue => {
-    sorting.value = typeof updateOrValue === 'function'
-        ? updateOrValue(sorting.value)
-        : updateOrValue
-  },
-  columns,
-  getCoreRowModel: getCoreRowModel(),
-  getPaginationRowModel: getPaginationRowModel(),
-  getFilteredRowModel: getFilteredRowModel(),
-  getSortedRowModel: getSortedRowModel(),
-})
-
-function handleGoToPage(page: number) {
-  goToPageNumber.value = page + 1;
-  table.setPageIndex(page);
+    case 'examination': {
+      text = 'Экзамен';
+      break;
+    }
+    case 'accreditation': {
+      text = 'Аккредитация';
+      break;
+    }
+  }
+  return text;
 }
 
-const pageIndex = computed(() => table.getState().pagination.pageIndex);
-const pageCount = computed(() => table.getPageCount());
-table.setPageSize(11);
+const formatSessionStatus = (sStatus: string) => {
+  let text = sStatus;
+  let className = '';
+  switch (sStatus) {
+    case 'planned': {
+      text = 'Запланировано';
+      className = 'planned'
+      break;
+    }
+    case 'completed': {
+      text = 'Завершено';
+      className = 'completed'
+      break;
+    }
+    case 'canceled': {
+      text = 'Отменено';
+      className = 'canceled'
+      break;
+    }
+    case 'ongoing': {
+      text = 'Идёт';
+      className = 'ongoing'
+      break;
+    }
+  }
+  return {
+    text,
+    className
+  }
+}
 </script>
 
 <template>
@@ -115,214 +117,65 @@ table.setPageSize(11);
           <button class="create-button">Создать</button>
         </div>
       </div>
-      <div class="table-wrap">
-        <div class="p-2">
-          <table>
-            <thead>
-            <tr
-                v-for="headerGroup in table.getHeaderGroups()"
-                :key="headerGroup.id"
-            >
-              <th
-                  v-for="header in headerGroup.headers"
-                  :key="header.id"
-                  :colSpan="header.colSpan"
-                  class="text-wrap-table-head"
-                  @click="header.column.getToggleSortingHandler()?.($event)"
-              >
-                <FlexRender
-                    v-if="!header.isPlaceholder"
-                    :render="header.column.columnDef.header"
-                    :props="header.getContext()"
-                />
-                <ChevronIcon class="sort-icon sort-icon-asc" v-if="header.column.getIsSorted() === 'asc'" />
-                <ChevronIcon class="sort-icon sort-icon-desc" v-else-if="header.column.getIsSorted() === 'desc'" />
-              </th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="row in table.getRowModel().rows" :key="row.id">
-              <td v-for="cell in row.getVisibleCells()" :key="cell.id"
-                  class="text-wrap"
-              >
-                <FlexRender
-                    :render="cell.column.columnDef.cell"
-                    :props="cell.getContext()"
-                />
-              </td>
-            </tr>
-            </tbody>
-          </table>
-          <div class="paginator-wrap">
-            <!--              <button-->
-            <!--                  class=""-->
-            <!--                  @click="() => table.setPageIndex(0)"-->
-            <!--                  :disabled="!table.getCanPreviousPage()"-->
-            <!--              >-->
-            <!--                «-->
-            <!--              </button>-->
-            <button
-                class="paginator-button"
-                @click="() => table.previousPage()"
-                :disabled="!table.getCanPreviousPage()"
-            >
-              ‹
-            </button>
-            <button
-                class="paginator-button selected"
-                @click="() => handleGoToPage(pageIndex -1)"
-                v-if="pageIndex > 0"
-            >
-              {{ pageIndex }}
-            </button>
-            <button
-                class="paginator-button selected"
-                @click="() => table.previousPage()"
-                disabled
-            >
-              {{ pageIndex + 1 }}
-            </button>
-
-            <button
-                class="paginator-button selected"
-                @click="() => handleGoToPage(pageIndex +1)"
-                v-if="pageIndex + 2 < pageCount"
-            >
-              {{ pageIndex + 2 }}
-            </button>
-            <button
-                class="paginator-button selected"
-                @click="() => handleGoToPage(pageIndex +2)"
-                v-if="pageIndex + 3 < pageCount"
-            >
-              {{ pageIndex + 3 }}
-            </button>
-            <button
-                class="paginator-button selected"
-                @click="() => handleGoToPage(pageIndex +3)"
-                v-if="pageIndex + 4 < pageCount"
-            >
-              {{ pageIndex + 4 }}
-            </button>
-            <button
-                class="paginator-button selected"
-                @click="() => handleGoToPage(pageIndex +4)"
-                v-if="pageIndex + 4 < pageCount - 1"
-            >
-              ...
-            </button>
-
-            <button
-                class="paginator-button"
-                @click="() => handleGoToPage(table.getPageCount() -1)"
-                v-if="table.getCanNextPage()"
-            >
-              {{ table.getPageCount() }}
-            </button>
-            <button
-                class="paginator-button"
-                @click="() => table.nextPage()"
-                :disabled="!table.getCanNextPage()"
-            >
-              ›
-            </button>
-            <!--              <button-->
-            <!--                  class=""-->
-            <!--                  @click="() => table.setPageIndex(table.getPageCount() - 1)"-->
-            <!--                  :disabled="!table.getCanNextPage()"-->
-            <!--              >-->
-            <!--                »-->
-            <!--              </button>-->
-          </div>
-        </div>
-      </div>
+      <TanTable :table-props="{data: sessionData, filter: globalFilter, columns: columns}"/>
     </div>
   </main>
 </template>
 
-<style scoped>
+<style>
 table {
+  table-layout: fixed;
   width: 100%;
-  height: 100%;
-  border-collapse: collapse;
+  text-align: start;
 }
 
-tr:nth-child(even) {
-  background: var(--scbase-12);
+tr {
+  height: 3.9rem;
 }
 
 th {
-  background-color: var(--scbase-12);
-  padding-block: 0.62rem;
-  padding-inline: 1rem;
-  height: 3.25rem;
-  min-width: 9.12rem;
-  cursor: pointer;
-}
-
-th:hover {
-  background-color: var(--scbase-4);
+  text-align: start;
+  height: 3rem;
 }
 
 th:nth-child(1) {
-  border-radius: 0.75rem 0 0;
-}
-
-th:last-child {
-  border-radius: 0 0.75rem 0 0;
-}
-
-td {
   padding-block: 0.62rem;
   padding-inline: 1rem;
-  height: 2.75rem;
+  width: 12.88rem;
 }
 
-.paginator-wrap {
-  display: flex;
-  padding: 0.75rem;
-  background: #f5f7f9;
-  gap: 0.5rem;
-  border: 1px solid var(--scbase-5);
-  border-radius: 0 0 0.75rem 0.75rem;
+th:nth-child(2) {
+  padding-block: 0.62rem;
+  padding-inline: 1rem;
+  width: 9.69rem;
 }
 
-.paginator-button {
-  border-radius: 0.5rem;
-  padding: 0.62rem;
-  width: 1.88rem;
-  height: 1.88rem;
-  background: var(--scbase-6);
-  border: 1px solid transparent;
-
-  font-family: var(--font-family), serif;
-  font-weight: 500;
-  font-size: 0.94rem;
-  line-height: 160%;
-  color: #2f3144;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+th:nth-child(3) {
+  padding-block: 0.62rem;
+  padding-inline: 1rem;
+  width: 35%;
 }
 
-.paginator-button:disabled {
-  background: #e0e0e0;
+th:nth-child(4) {
+  padding-block: 0.62rem;
+  padding-inline: 1rem;
+  width: 10rem;
 }
 
-.paginator-button:hover:not(:disabled) {
-  border: 1px solid #3761f3;
-  cursor: pointer;
+th:nth-child(5) {
+  padding-block: 0.62rem;
+  padding-inline: 1rem;
+  width: 20%;
 }
 
-.table-wrap {
-  border: 1px solid var(--scbase-12);
-  border-radius: 0.75rem;
-  width: 100%;
-  height: auto; /* calc(100% - 1.2rem);*/
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+th:nth-child(6) {
+  padding-block: 0.62rem;
+  padding-inline: 1rem;
+  width: 15%;
 }
+</style>
 
+<style scoped>
 .header-wrap {
   display: flex;
   width: 100%;
@@ -405,43 +258,6 @@ main {
   font-size: 0.81rem;
   line-height: 154%;
   color: var(--scbase-1);
-}
-
-.text-wrap {
-  font-family: var(--font-family), serif;
-  font-weight: 500;
-  font-size: 0.94rem;
-  line-height: 160%;
-  color: #2f3144;
-}
-
-.text-wrap-table-head {
-  font-family: var(--font-family), serif;
-  font-weight: 800;
-  font-size: 1.06rem;
-  line-height: 165%;
-  color: #2f3144;
-  justify-content: center;
-}
-
-.sort-icon {
-  border-radius: 0.38rem;
-  margin-left: 0.4rem;
-  height: 1rem;
-}
-.sort-icon-desc {
-  transform: rotate(180deg) translateY(-40%);
-}
-.sort-icon-asc {
-  transform: translateY(-10%);
-}
-
-.text-wrap-status {
-  font-family: var(--font-family), serif;
-  font-weight: 500;
-  font-size: 0.81rem;
-  line-height: 154%;
-  color: #2f3144;
 }
 
 .text-wrap-header {
