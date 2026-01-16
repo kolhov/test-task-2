@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="description" content="Prototype page coded as a test task" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Food test</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="assets/css/Normalize.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap"
+    />
+    <script src="assets/main.js" defer></script>
+  </head>
+
+  <body>
+    <header>
+      <div class="header__wrap">
+        <a href="/" class="logo">
+          <img src="assets/img/logo.svg" alt="Logo" />
+          <div class="logo__text">
+            <span>Best Restaurant</span>
+            <span>Near Me</span>
+          </div>
+        </a>
+
+        <nav class="nav">
+          <a href="/">Countries</a>
+          <a href="/">Partners</a>
+          <a href="/">Map</a>
+        </nav>
+        <button
+          aria-label="Open navigation menu"
+          type="button"
+          onclick="openNavigation()"
+          class="nav__button"
+        >
+          <img src="assets/img/menu.svg" alt="menu button" />
+        </button>
+      </div>
+      <nav id="navMenu" class="nav__menu">
+        <a href="/">Countries</a>
+        <a href="/">Partners</a>
+        <a href="/">Map</a>
+      </nav>
+    </header>
+    <main>
+      <div class="search">
+        <div class="search__text">
+          <h1>Best Restaurant Near Me Search</h1>
+          <p class="search__description">
+            Discover the top restaurants around the globe for an unforgettable
+            dining experience
+          </p>
+        </div>
+        <form class="search__wrap">
+          <div class="search__input_wrap">
+            <input
+              id="cityInput"
+              name="city"
+              placeholder="City"
+              class="search__input"
+            />
+            <button
+              onclick="setPos('cityInput')"
+              aria-label="Auto position"
+              type="button"
+              class="city-input__button"
+            >
+              <img src="assets/img/position.svg" alt="Auto position" />
+            </button>
+          </div>
+          <div class="divider"></div>
+          <div class="search__input_wrap">
+            <select id="foodSelect" name="food" class="search__input">
+              <option value="">All food</option>
+              <option value="asian">Asian food</option>
+              <option value="european">European food</option>
+              <option value="mediterranean">Mediterranean food</option>
+              <option value="latin">Latin American food</option>
+              <option value="middle">Middle Eastern food</option>
+            </select>
+            <button
+              aria-label="Open food type select"
+              type="button"
+              class="food-select__button"
+            >
+              <img src="assets/img/chevron.svg" alt="Auto position" />
+            </button>
+          </div>
+          <button type="submit" class="search__button">SEARCH</button>
+        </form>
+      </div>
+      <div class="map">
+        <p class="map__text">Explore Best Restaurant Near Me on map</p>
+        <button aria-label="Explore map" class="map__button">
+          <img src="assets/img/rightArrow.svg" alt="Explore map" />
+        </button>
+      </div>
+      <div class="ad__wrap">
+        <div class="ad">AD</div>
+      </div>
+      <div class="food__wrap">
+        <a href="/" class="food">
+          <img
+            src="assets/img/Asian food.png"
+            alt="Asian food"
+            class="food__img"
+          />
+          <p>Asian food</p>
+          <span class="food__number">8 481</span>
+        </a>
+        <a href="/" class="food">
+          <img
+            src="assets/img/European food.png"
+            alt="European food"
+            class="food__img"
+          />
+          <p>European food</p>
+          <span class="food__number">2 481</span>
+        </a>
+        <a href="/" class="food">
+          <img
+            src="assets/img/Mediterranean food.png"
+            alt="Mediterranean food"
+            class="food__img"
+          />
+          <p>Mediterranean food</p>
+          <span class="food__number">1 834</span>
+        </a>
+        <a href="/" class="food">
+          <img
+            src="assets/img/Latin American food.png"
+            alt="Latin American food"
+            class="food__img"
+          />
+          <p>Latin American food</p>
+          <span class="food__number">1 481</span>
+        </a>
+        <a href="/" class="food">
+          <img
+            src="assets/img/Middle Eastern food.png"
+            alt="Middle Eastern food"
+            class="food__img"
+          />
+          <p>Middle Eastern food</p>
+          <span class="food__number">781</span>
+        </a>
+      </div>
+      <div class="restaurants__wrap">
+        <h2>Best Restaurant by Country</h2>
+        <div class="background-base-2">
+          <div class="restaurants__table">
+            <a>🇺🇸 United States (34260 locations)</a>
+            <a>🇨🇦 Canada (2696 locations)</a>
+            <a>🇪🇸 Spain (271 locations)</a>
+            <a>🇵🇱 Poland (214 locations)</a>
+            <a>🇸🇻 El Salvador (212 locations)</a>
+            <a>🇦🇺 Australia (184 locations)</a>
+            <a>🇨🇭 Switzerland (153 locations)</a>
+            <a>🇭🇰 Hong Kong (152 locations)</a>
+            <a>🇷🇴 Romania (150 locations)</a>
+            <a>🇦🇹 Austria (131 locations)</a>
+          </div>
+          <button class="restaurants__button">
+            <img src="assets/img/chevron.svg" alt="Expand" />Expand
+          </button>
+        </div>
+      </div>
+      <div class="add_wrap">
+        <h2>Add your restaurant</h2>
+        <form class="add__form-wrap">
+          <div class="add__form">
+            <div class="add__inputs divider">
+              <input id="email" name="email" placeholder=" " class="add__input" />
+              <label for="email">E-mail</label>
+              <div class="add__city-input">
+                <input
+                  id="cityInputAdd"
+                  name="city"
+                  placeholder=" "
+                  class="add__input"
+                />
+                <label for="cityInputAdd">City</label>
+                <button
+                  onclick="setPos('cityInputAdd')"
+                  aria-label="Auto position"
+                  type="button"
+                  class="city-input__button"
+                >
+                  <img src="assets/img/position.svg" alt="Auto position" />
+                </button>
+              </div>
+              <input
+                id="name"
+                name="name"
+                placeholder=" "
+                class="add__input"
+              />
+              <label for="name">Name of Restaurant</label>
+              <input
+                id="about"
+                name="about"
+                placeholder=" "
+                class="add__input"
+              />
+              <label for="about">About your place</label>
+            </div>
+            <div class="add__checkboxes">
+              <input type="checkbox" id="asian" name="asian" value="asian" />
+              <label for="asian">Asian food</label>
+              <input type="checkbox" id="european" name="european" value="european" />
+              <label for="european">European food</label>
+              <input
+                type="checkbox"
+                id="mediterranean"
+                name="mediterranean"
+                value="mediterranean"
+              />
+              <label for="mediterranean">Mediterranean food</label>
+              <input type="checkbox" id="latin" name="latin" value="latin" />
+              <label for="latin">Latin American food</label>
+              <input type="checkbox" id="middle" name="middle" value="middle" />
+              <label for="middle">Middle Eastern food</label>
+            </div>
+          </div>
+          <button type="submit" class="add__button">ADD</button>
+        </form>
+      </div>
+    </main>
+    <footer>
+      <div class="footer__el">
+        <div href="/" class="logo footer_opacity">
+          <img src="assets/img/logo.svg" alt="Logo" />
+          <div class="logo__text">
+            <span>Best Restaurant</span>
+            <span>Near Me</span>
+          </div>
+        </div>
+        <div class="logo__text footer_opacity">© 2022</div>
+      </div>
+    </footer>
+  </body>
+</html>
