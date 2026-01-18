@@ -29,5 +29,25 @@ async function getCityFromCoords(lat, lon) {
 
 function openNavigation() {
   const navEl = document.getElementById("navMenu");
-  navEl.classList.toggle('active')
+  navEl.classList.toggle("active");
+}
+
+function emailValidate(input) {
+  const emailValue = input.value;
+  const emailRegex = /^\S+@\S+\.\S+$/;
+  const errEl = document.getElementById("emailErr");
+
+  if (!emailValue) {
+    input.classList.add("error-text");
+    errEl.classList.add("error-text");
+    errEl.textContent = "Email required";
+  } else if (!emailRegex.test(emailValue)) {
+    input.classList.add("error-text");
+    errEl.classList.add("error-text");
+    errEl.textContent = "Email incorrect";
+  } else {
+    errEl.classList.remove("error-text");
+    input.classList.remove("error-text");
+    errEl.textContent = "";
+  }
 }

@@ -179,16 +179,29 @@
         <form class="add__form-wrap">
           <div class="add__form">
             <div class="add__inputs divider">
-              <input id="email" name="email" placeholder=" " class="add__input" />
-              <label for="email">E-mail</label>
-              <div class="add__city-input">
+              <div class="form__item">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder=" "
+                  class="add__input"
+                  onblur="emailValidate(this)"
+                />
+                <label for="email">E-mail</label>
+                <span id="emailErr" class="input__description">
+                  <!-- Description / Error -->
+                </span>
+              </div>
+              <div class="divider-block"></div>
+              <div class="form__item add__city-input">
                 <input
                   id="cityInputAdd"
                   name="city"
                   placeholder=" "
                   class="add__input"
                 />
-                <label for="cityInputAdd">City</label>
+                <label for="cityInputAdd">Address</label>
                 <button
                   onclick="setPos('cityInputAdd')"
                   aria-label="Auto position"
@@ -198,37 +211,63 @@
                   <img src="assets/img/position.svg" alt="Auto position" />
                 </button>
               </div>
-              <input
-                id="name"
-                name="name"
-                placeholder=" "
-                class="add__input"
-              />
-              <label for="name">Name of Restaurant</label>
-              <input
-                id="about"
-                name="about"
-                placeholder=" "
-                class="add__input"
-              />
-              <label for="about">About your place</label>
+              <div class="divider-block"></div>
+              <div class="form__item">
+                <input
+                  id="name"
+                  name="name"
+                  placeholder=" "
+                  class="add__input"
+                />
+                <label for="name">Name of Restaurant</label>
+              </div>
+              <div class="divider-block"></div>
+              <div class="form__item textarea__wrap">
+                <textarea
+                  id="about"
+                  name="about"
+                  placeholder=" "
+                  class="add__input"
+                ></textarea>
+                <label for="about">About your place</label>
+              </div>
             </div>
             <div class="add__checkboxes">
-              <input type="checkbox" id="asian" name="asian" value="asian" />
-              <label for="asian">Asian food</label>
-              <input type="checkbox" id="european" name="european" value="european" />
-              <label for="european">European food</label>
-              <input
-                type="checkbox"
-                id="mediterranean"
-                name="mediterranean"
-                value="mediterranean"
-              />
-              <label for="mediterranean">Mediterranean food</label>
-              <input type="checkbox" id="latin" name="latin" value="latin" />
-              <label for="latin">Latin American food</label>
-              <input type="checkbox" id="middle" name="middle" value="middle" />
-              <label for="middle">Middle Eastern food</label>
+              <label for="asian">
+                <input type="checkbox" id="asian" name="asian" value="asian" />
+                Asian food
+              </label>
+              <label for="european">
+                <input
+                  type="checkbox"
+                  id="european"
+                  name="european"
+                  value="european"
+                />
+                European food
+              </label>
+              <label for="mediterranean">
+                <input
+                  type="checkbox"
+                  id="mediterranean"
+                  name="mediterranean"
+                  value="mediterranean"
+                />
+                Mediterranean food
+              </label>
+              <label for="latin">
+                <input type="checkbox" id="latin" name="latin" value="latin" />
+                Latin American food
+              </label>
+              <label for="middle">
+                <input
+                  type="checkbox"
+                  id="middle"
+                  name="middle"
+                  value="middle"
+                />
+                Middle Eastern food
+              </label>
             </div>
           </div>
           <button type="submit" class="add__button">ADD</button>
