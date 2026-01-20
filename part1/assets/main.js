@@ -51,3 +51,8 @@ function emailValidate(input) {
     errEl.textContent = "";
   }
 }
+
+function expandBestRestaurants(btn) {
+  btn.classList.toggle("open");
+  document.getElementById("table-wrap").classList.toggle("open");
+}
