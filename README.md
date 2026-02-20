@@ -1,9 +1,8 @@
 # Демо
 
-### Сайты размещены на серверах Cloudflare
-Часть 1: [best-restaurant.kolhovv.workers.dev](https://best-restaurant.kolhovv.workers.dev)
+[Часть 1](https://kolhov.github.io/test-task-2/)
 
-Часть 2: [part-2.kolhovv.workers.dev](https://part-2.kolhovv.workers.dev)
+[Часть 2](https://kolhov.github.io/test-task-2/part2/)
 
 # Тестовое задание
 
