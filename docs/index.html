@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="description" content="Prototype page coded as a test task" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Food test</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="assets/css/Normalize.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap" />
+  <script src="assets/main.js" defer></script>
+</head>
+
+<body>
+  <header>
+    <div class="header__wrap">
+      <a href="/" class="logo">
+        <img src="assets/img/logo.svg" alt="Logo" />
+        <div class="logo__text">
+          <span>Best Restaurant</span>
+          <span>Near Me</span>
+        </div>
+      </a>
+
+      <nav class="nav">
+        <a href="/">Countries</a>
+        <a href="/">Partners</a>
+        <a href="/">Map</a>
+      </nav>
+      <button aria-label="Open navigation menu" type="button" onclick="openNavigation()" class="nav__button">
+        <img src="assets/img/menu.svg" alt="menu button" />
+      </button>
+    </div>
+    <nav id="navMenu" class="nav__menu">
+      <a href="/">Countries</a>
+      <a href="/">Partners</a>
+      <a href="/">Map</a>
+    </nav>
+  </header>
+  <main>
+    <div class="search">
+      <div class="search__text">
+        <h1>Best Restaurant Near Me Search</h1>
+        <p class="search__description">
+          Discover the top restaurants around the globe for an unforgettable
+          dining experience
+        </p>
+      </div>
+      <form class="search__wrap">
+        <div class="search__input_wrap">
+          <input id="cityInput" name="city" placeholder="City" class="search__input" />
+          <button onclick="setPos('cityInput')" aria-label="Auto position" type="button" class="city-input__button">
+            <img src="assets/img/position.svg" alt="Auto position" />
+          </button>
+        </div>
+        <div class="divider"></div>
+        <div class="search__input_wrap">
+          <select id="foodSelect" name="food" class="search__input">
+            <option value="">All food</option>
+            <option value="asian">Asian food</option>
+            <option value="european">European food</option>
+            <option value="mediterranean">Mediterranean food</option>
+            <option value="latin">Latin American food</option>
+            <option value="middle">Middle Eastern food</option>
+          </select>
+          <button aria-label="Open food type select" type="button" class="food-select__button">
+            <img src="assets/img/chevron.svg" alt="Auto position" />
+          </button>
+        </div>
+        <button type="submit" class="search__button">SEARCH</button>
+      </form>
+    </div>
+    <div class="map">
+      <p class="map__text">Explore Best Restaurant Near Me on map</p>
+      <button aria-label="Explore map" class="map__button">
+        <img src="assets/img/rightArrow.svg" alt="Explore map" />
+      </button>
+    </div>
+    <div class="ad__wrap">
+      <div class="ad">AD</div>
+    </div>
+    <div class="food__wrap">
+      <a href="/" class="food">
+        <img src="assets/img/Asian food.png" alt="Asian food" class="food__img" />
+        <p>Asian food</p>
+        <span class="food__number">8 481</span>
+      </a>
+      <a href="/" class="food">
+        <img src="assets/img/European food.png" alt="European food" class="food__img" />
+        <p>European food</p>
+        <span class="food__number">2 481</span>
+      </a>
+      <a href="/" class="food">
+        <img src="assets/img/Mediterranean food.png" alt="Mediterranean food" class="food__img" />
+        <p>Mediterranean food</p>
+        <span class="food__number">1 834</span>
+      </a>
+      <a href="/" class="food">
+        <img src="assets/img/Latin American food.png" alt="Latin American food" class="food__img" />
+        <p>Latin American food</p>
+        <span class="food__number">1 481</span>
+      </a>
+      <a href="/" class="food">
+        <img src="assets/img/Middle Eastern food.png" alt="Middle Eastern food" class="food__img" />
+        <p>Middle Eastern food</p>
+        <span class="food__number">781</span>
+      </a>
+    </div>
+    <div class="restaurants__block--wrap">
+      <h2>Best Restaurant by Country</h2>
+      <div class="background-base-2 restaurants__wrap">
+        <div id="table-wrap" class="restaurants__table--wrap">
+          <div class="restaurants__table">
+            <a>
+              <img src="assets/img/cif--us.svg" />
+              United States (34260 locations)</a>
+            <a>
+              <img src="assets/img/cif--ca.svg" />
+              Canada (2696 locations)</a>
+            <a>
+              <img src="assets/img/cif--es.svg" />
+              Spain (271 locations)</a>
+            <a>
+              <img src="assets/img/cif--pl.svg" />
+              Poland (214 locations)</a>
+            <a>
+              <img src="assets/img/cif--sv.svg" />
+              El Salvador (212 locations)</a>
+            <a>
+              <img src="assets/img/cif--au.svg" />
+              Australia (184 locations)</a>
+            <a>
+              <img src="assets/img/cif--ch.svg" />
+              Switzerland (153 locations)</a>
+            <a>
+              <img src="assets/img/cif--hk.svg" />
+              Hong Kong (152 locations)</a>
+            <a>
+              <img src="assets/img/cif--ro.svg" />
+              Romania (150 locations)</a>
+            <a>
+              <img src="assets/img/cif--at.svg" />
+              Austria (131 locations)</a>
+            <a>
+              <img src="assets/img/cif--ru.svg" />
+              Russia (111 locations)</a>
+          </div>
+          <div class="restaurants__table hideable">
+            <a>
+              <img src="assets/img/cif--us.svg" />
+              United States (34260 locations)</a>
+            <a>
+              <img src="assets/img/cif--ca.svg" />
+              Canada (2696 locations)</a>
+            <a>
+              <img src="assets/img/cif--es.svg" />
+              Spain (271 locations)</a>
+            <a>
+              <img src="assets/img/cif--pl.svg" />
+              Poland (214 locations)</a>
+            <a>
+              <img src="assets/img/cif--sv.svg" />
+              El Salvador (212 locations)</a>
+            <a>
+              <img src="assets/img/cif--au.svg" />
+              Australia (184 locations)</a>
+            <a>
+              <img src="assets/img/cif--ch.svg" />
+              Switzerland (153 locations)</a>
+            <a>
+              <img src="assets/img/cif--hk.svg" />
+              Hong Kong (152 locations)</a>
+            <a>
+              <img src="assets/img/cif--ro.svg" />
+              Romania (150 locations)</a>
+            <a>
+              <img src="assets/img/cif--at.svg" />
+              Austria (131 locations)</a>
+            <a>
+              <img src="assets/img/cif--ru.svg" />
+              Russia (111 locations)</a>
+          </div>
+          <div class="restaurants__table hideable">
+            <a>
+              <img src="assets/img/cif--us.svg" />
+              United States (34260 locations)</a>
+            <a>
+              <img src="assets/img/cif--ca.svg" />
+              Canada (2696 locations)</a>
+            <a>
+              <img src="assets/img/cif--es.svg" />
+              Spain (271 locations)</a>
+            <a>
+              <img src="assets/img/cif--pl.svg" />
+              Poland (214 locations)</a>
+            <a>
+              <img src="assets/img/cif--sv.svg" />
+              El Salvador (212 locations)</a>
+            <a>
+              <img src="assets/img/cif--au.svg" />
+              Australia (184 locations)</a>
+            <a>
+              <img src="assets/img/cif--ch.svg" />
+              Switzerland (153 locations)</a>
+            <a>
+              <img src="assets/img/cif--hk.svg" />
+              Hong Kong (152 locations)</a>
+            <a>
+              <img src="assets/img/cif--ro.svg" />
+              Romania (150 locations)</a>
+            <a>
+              <img src="assets/img/cif--at.svg" />
+              Austria (131 locations)</a>
+            <a>
+              <img src="assets/img/cif--ru.svg" />
+              Russia (111 locations)</a>
+          </div>
+        </div>
+        <button class="restaurants__button background-base-2" onclick="expandBestRestaurants(this)">
+          <img src="assets/img/chevron.svg" alt="Expand" />
+          <span>
+            Expand
+          </span>
+        </button>
+      </div>
+    </div>
+    <div class="add_wrap">
+      <h2>Add your restaurant</h2>
+      <form class="add__form-wrap">
+        <div class="add__form">
+          <div class="add__inputs divider">
+            <div class="form__item">
+              <input id="email" name="email" type="email" placeholder=" " class="add__input"
+                onblur="emailValidate(this)" />
+              <label for="email">E-mail</label>
+              <span id="emailErr" class="input__description">
+                <!-- Description / Error -->
+              </span>
+            </div>
+            <div class="divider-block"></div>
+            <div class="form__item add__city-input">
+              <input id="cityInputAdd" name="city" placeholder=" " class="add__input" />
+              <label for="cityInputAdd">Address</label>
+              <button onclick="setPos('cityInputAdd')" aria-label="Auto position" type="button"
+                class="city-input__button">
+                <img src="assets/img/position.svg" alt="Auto position" />
+              </button>
+            </div>
+            <div class="divider-block"></div>
+            <div class="form__item">
+              <input id="name" name="name" placeholder=" " class="add__input" />
+              <label for="name">Name of Restaurant</label>
+            </div>
+            <div class="divider-block"></div>
+            <div class="form__item textarea__wrap">
+              <textarea id="about" name="about" placeholder=" " class="add__input"></textarea>
+              <label for="about">About your place</label>
+            </div>
+          </div>
+          <div class="add__checkboxes">
+            <label for="asian">
+              <input type="checkbox" id="asian" name="food_type" value="asian" />
+              <span>
+                Asian food
+              </span>
+            </label>
+            <label for="european">
+              <input type="checkbox" id="european" name="food_type" value="european" />
+              <span>
+                European food
+              </span>
+            </label>
+            <label for="mediterranean">
+              <input type="checkbox" id="mediterranean" name="food_type" value="mediterranean" />
+              <span>
+                Mediterranean food
+              </span>
+            </label>
+            <label for="latin">
+              <input type="checkbox" id="latin" name="food_type" value="latin" />
+              <span>
+                Latin American food
+              </span>
+            </label>
+            <label for="middle">
+              <input type="checkbox" id="middle" name="food_type" value="middle" />
+              <span>
+                Middle Eastern food
+              </span>
+            </label>
+          </div>
+        </div>
+        <button type="submit" class="add__button">ADD</button>
+      </form>
+    </div>
+  </main>
+  <footer>
+    <div class="footer__el">
+      <div href="/" class="logo footer_opacity">
+        <img src="assets/img/logo.svg" alt="Logo" />
+        <div class="logo__text">
+          <span>Best Restaurant</span>
+          <span>Near Me</span>
+        </div>
+      </div>
+      <div class="logo__text footer_opacity">© 2022</div>
+    </div>
+  </footer>
+</body>
+
+</html>
